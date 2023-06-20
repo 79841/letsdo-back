@@ -31,8 +31,9 @@ def create(request: list[schemas.CheckList], db: Session, current_user: schemas.
 
 
 def getByDate(date:str, db: Session, current_user: schemas.User = Depends(oauth2.get_current_user)):
-    checkList = db.query(CheckList).filter(CheckList.date == date).\
+    checkList = db.query(CheckList.code, CheckList.done).filter(CheckList.date == date).\
                                     filter(CheckList.userid == current_user.id).all()
+
     return checkList
 
 

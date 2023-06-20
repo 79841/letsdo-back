@@ -7,7 +7,6 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 from fastapi import status, Request
 
-
 app = FastAPI()
 
 models.Base.metadata.create_all(engine)

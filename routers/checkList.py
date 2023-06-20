@@ -19,11 +19,11 @@ get_db = database.get_db
 async def createCheckList(request: list[schemas.CheckList], db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
     return checkList.create(request, db, current_user)
 
-@router.get('/')
-@router.get('/{date}', response_model=list[schemas.CheckList])
+
+@router.get('/', response_model=list[schemas.ResponseCheckList])
+@router.get('/{date}', response_model=list[schemas.ResponseCheckList])
 async def getCheckList(date:str=datetime.datetime.today().strftime("%Y-%m-%d"), db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
     return checkList.getByDate(date, db, current_user)
-
 
 
 @router.delete('/{code}')

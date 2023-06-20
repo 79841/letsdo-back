@@ -18,7 +18,7 @@ def signin(request: schemas.Login, db: Session = Depends(database.get_db)):
                             detail=f"Incorrect password")
 
     access_token = getToken.create_access_token(
-        data={"id": user.id, "email": user.email})
+        data={"id": user.id, "email": user.email, "role":user.role})
 
     response = JSONResponse(content={"Authorization":f"Bearer {access_token}"}, status_code=200)
     response.set_cookie(

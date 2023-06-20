@@ -10,11 +10,7 @@ import datetime
 def create(request: schemas.User, db: Session):
 
     user = dict(request)
-    # if user['password'] != user['passwordcheck']:
-    #     return 'password not correct'
     user.update(password=hashing.Hash.bcrypt(user['password']))
-    
-    # user.pop("passwordcheck")
 
     new_user = models.User(**dict(user))
     db.add(new_user)

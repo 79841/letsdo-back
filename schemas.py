@@ -10,6 +10,7 @@ class User(BaseModel):
     email: str
     username: str
     password: str
+    role: int
 
 class CreateUser(User):
     passwordcheck: str
@@ -22,7 +23,7 @@ class ShowUser(BaseModel):
         orm_mode = True
 
 class Login(BaseModel):
-    email:str
+    email: str
     password: str
 
 
@@ -48,7 +49,19 @@ class CheckList(BaseModel):
     # userid:int
     code:int
     done:bool
-    date:datetime.date = datetime.datetime.today().strftime("%Y-%m-%d")
+    date:Optional[datetime.date] = datetime.datetime.today().strftime("%Y-%m-%d")
 
     class Config:
         orm_mode = True
+
+
+class ResponseCheckList(BaseModel):
+    code:int
+    done:bool
+
+
+class ResponseMessage(BaseModel):
+    message_from:int
+    message_to:int
+    content:str
+    created_at:datetime
