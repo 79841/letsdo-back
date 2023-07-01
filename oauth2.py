@@ -45,7 +45,7 @@ class OAuth2PasswordBearerCookie(OAuth2):
 
         else:
             authorization = False
-
+        
         if not authorization or scheme.lower() != "bearer":
             if self.auto_error:
                 # raise HTTPException(

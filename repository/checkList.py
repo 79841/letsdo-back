@@ -20,7 +20,7 @@ def create(request: list[schemas.CheckList], db: Session, current_user: schemas.
         else:
             
             check = dict(check)
-            check.update({"userid":current_user.id})
+            check.update({"user_id":current_user.id})
             dbCheck = CheckList(**check)
             
         db.add(dbCheck)
@@ -32,7 +32,7 @@ def create(request: list[schemas.CheckList], db: Session, current_user: schemas.
 
 def getByDate(date:str, db: Session, current_user: schemas.User = Depends(oauth2.get_current_user)):
     checkList = db.query(CheckList.code, CheckList.done).filter(CheckList.date == date).\
-                                    filter(CheckList.userid == current_user.id).all()
+                                    filter(CheckList.user_id == current_user.id).all()
 
     return checkList
 

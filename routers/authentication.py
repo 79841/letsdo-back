@@ -13,6 +13,7 @@ router = APIRouter(
 
 @router.post('/', response_class=Response)
 async def signin(request: schemas.Login, db: Session = Depends(database.get_db)):
+
     return auth.signin(request, db)
 
 

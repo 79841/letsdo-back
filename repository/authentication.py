@@ -6,9 +6,9 @@ from fastapi.responses import  JSONResponse, RedirectResponse
 
 
 def signin(request: schemas.Login, db: Session = Depends(database.get_db)):
-    print(request)
     user = db.query(models.User).filter(
         models.User.email == request.email).first()
+
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Invalid Credentials")
@@ -18,7 +18,7 @@ def signin(request: schemas.Login, db: Session = Depends(database.get_db)):
                             detail=f"Incorrect password")
 
     access_token = getToken.create_access_token(
-        data={"id": user.id, "email": user.email, "role":user.role})
+        data={"id": user.id, "email": user.email, "username":user.username, "role":user.role})
 
     response = JSONResponse(content={"Authorization":f"Bearer {access_token}"}, status_code=200)
     response.set_cookie(
@@ -29,6 +29,7 @@ def signin(request: schemas.Login, db: Session = Depends(database.get_db)):
         expires=1800,
         
     )
+
     return response
 
 

@@ -10,11 +10,12 @@ class User(BaseModel):
     email: str
     username: str
     password: str
-    role: int
+    role: int = 0
 
 class CreateUser(User):
-    passwordcheck: str
-
+    email: str
+    username: str
+    password: str
 
 class ShowUser(BaseModel):
     username: str
@@ -35,6 +36,8 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     id: Optional[int] = None
     email: Optional[str] = None
+    username:Optional[str] = None
+    role: Optional[int] = None
 
 
 class TodoList(BaseModel):
@@ -60,8 +63,12 @@ class ResponseCheckList(BaseModel):
     done:bool
 
 
-class ResponseMessage(BaseModel):
-    message_from:int
-    message_to:int
-    content:str
-    created_at:datetime
+# class ResponseMessage(BaseModel):
+#     id:int
+#     content:str
+#     user_id:int
+#     chatroom_id:int
+#     timestamp:datetime.datetime
+
+#     class config:
+#         orm_mode = True

@@ -12,8 +12,6 @@ def create(request: schemas.TodoList, db: Session):
     db.add(todo)
     db.commit()
     db.refresh(todo)
-
-    print(request)
     
     return JSONResponse(
         jsonable_encoder({"todo": dict(request)['name']}), status_code=status.HTTP_201_CREATED)
