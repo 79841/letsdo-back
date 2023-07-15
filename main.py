@@ -2,7 +2,7 @@ from fastapi import FastAPI
 import uvicorn
 import models
 from database import engine
-from routers import chatroom, checkList, message, user, authentication, todoList, exception
+from routers import chatroom, checkList, message, user, authentication, todoList, exception, profile
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 from fastapi import status, Request
@@ -27,6 +27,7 @@ app.include_router(todoList.router)
 app.include_router(checkList.router)
 app.include_router(message.router)
 app.include_router(chatroom.router)
+app.include_router(profile.router)
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True, access_log=False)

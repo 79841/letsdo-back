@@ -1,8 +1,11 @@
-import datetime
+from datetime import datetime, timedelta, timezone
 from database import Base
 from sqlalchemy import DATE, DATETIME, Boolean, Column, Date, DateTime, ForeignKey, Integer, String, Sequence, Text
 from sqlalchemy.orm import relationship
 
+# datetime_utc = datetime.utcnow()
+
+timezone_kst = timezone(timedelta(hours=9))
 
 
 class User(Base):
@@ -10,13 +13,22 @@ class User(Base):
     id_seq = Sequence('USER_ID_SEQ', metadata=Base.metadata, start=1)
     ROLE_USER, ROLE_COUNSELOR = 0, 1
     id = Column(Integer, id_seq, primary_key=True)
-    email = Column(String(200), nullable=False, unique=True)
+    email = Column(String(100), nullable=False, unique=True)
     username = Column(String(100), nullable=False, unique=True)
-    password = Column(String(200), nullable=False)
+    password = Column(String(100), nullable=False)
     role = Column(Integer, default=ROLE_USER, nullable=False)
+    profile = relationship("Profile", back_populates="user")
     participations = relationship('Participant', back_populates='user')
     messages = relationship('Message', back_populates='user')
 
+
+class Profile(Base):
+    __tablename__ = "profile"
+    id_seq = Sequence('PROFILE_ID_SEQ', metadata=Base.metadata, start=1)
+    id = Column(Integer, id_seq, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    path = Column(String(200), nullable=False)
+    user = relationship('User', back_populates='profile')
 
 
 class TodoList(Base):
@@ -26,14 +38,12 @@ class TodoList(Base):
     name = Column(String(100), nullable=False, unique=True)
 
 
-
 class CheckList(Base):
     __tablename__ = "checklist"
     user_id = Column(Integer, ForeignKey("user.id"), primary_key=True)
     code = Column(Integer, ForeignKey("todolist.code"), primary_key=True)
     done = Column(Boolean, default=False)
-    date = Column(DATE, default=datetime.datetime.utcnow, primary_key=True)
-
+    date = Column(DATE, default=datetime.utcnow, primary_key=True)
 
 
 class Chatroom(Base):
@@ -44,19 +54,17 @@ class Chatroom(Base):
     participants = relationship('Participant', back_populates='chatroom')
 
 
-
 class Message(Base):
     __tablename__ = 'message'
     id_seq = Sequence("MESSAGE_ID_SEQ", metadata=Base.metadata, start=1)
-    id = Column(Integer, id_seq, primary_key = True)
+    id = Column(Integer, id_seq, primary_key=True)
     content = Column(Text, nullable=False)
     user_id = Column(Integer, ForeignKey('user.id'))
     chatroom_id = Column(Integer, ForeignKey('chatroom.id'))
-    timestamp = Column(DATETIME, default=datetime.datetime.utcnow, nullable=False)
+    timestamp = Column(
+        DATETIME, default=datetime.utcnow, nullable=False)
     user = relationship('User', back_populates='messages')
     chatroom = relationship('Chatroom', back_populates='messages')
-
-
 
 
 class Participant(Base):
@@ -67,4 +75,3 @@ class Participant(Base):
     chatroom_id = Column(Integer, ForeignKey('chatroom.id'))
     user = relationship('User', back_populates='participations')
     chatroom = relationship('Chatroom', back_populates='participants')
-

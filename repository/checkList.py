@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 import oauth2
-import schemas, hashing
+import schemas
+import hashing
 from models import CheckList
 from fastapi import Depends, HTTPException, status
 from fastapi.encoders import jsonable_encoder
@@ -18,21 +19,22 @@ def create(request: list[schemas.CheckList], db: Session, current_user: schemas.
             for key, value in dict(check).items():
                 setattr(dbCheck, key, value)
         else:
-            
+
             check = dict(check)
-            check.update({"user_id":current_user.id})
+            check.update({"user_id": current_user.id})
             dbCheck = CheckList(**check)
-            
-        db.add(dbCheck)
+
+            db.add(dbCheck)
+
         db.commit()
 
     return JSONResponse(
         jsonable_encoder(request), status_code=status.HTTP_201_CREATED)
 
 
-def getByDate(date:str, db: Session, current_user: schemas.User = Depends(oauth2.get_current_user)):
-    checkList = db.query(CheckList.code, CheckList.done).filter(CheckList.date == date).\
-                                    filter(CheckList.user_id == current_user.id).all()
+def getByDate(date: str, db: Session, current_user: schemas.User = Depends(oauth2.get_current_user)):
+    checkList = db.query(CheckList.date, CheckList.code, CheckList.done).filter(CheckList.date == date).\
+        filter(CheckList.user_id == current_user.id).all()
 
     return checkList
 
@@ -44,7 +46,16 @@ def getAll(db: Session):
                             detail=f"There is nothing to do.")
     return checkList
 
-def delete(code:int, db: Session):
+
+def delete(code: int, db: Session):
     checkList = db.query(CheckList).filter(CheckList.code == code).delete()
     db.commit()
+    return checkList
+
+
+def getByPeriod(start_date: str, end_date: str, db: Session, current_user: schemas.User = Depends(oauth2.get_current_user)):
+
+    checkList = db.query(CheckList.code, CheckList.date, CheckList.done).filter(current_user.id == CheckList.user_id).filter(
+        CheckList.date >= start_date, CheckList.date <= end_date).all()
+
     return checkList
