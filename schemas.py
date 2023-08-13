@@ -1,14 +1,10 @@
 # from ctypes import WinError
 from datetime import date, datetime, timezone, timedelta
 
-from pydantic import BaseModel
 from typing import List, Optional
 from fastapi import Form
+from pydantic import BaseModel
 from sqlalchemy import Date
-
-datetime_utc = datetime.utcnow()
-
-timezone_kst = timezone(timedelta(hours=9))
 
 
 class User(BaseModel):
@@ -76,6 +72,14 @@ class ResponseCheckList(BaseModel):
     date: date
     code: int
     done: bool
+
+
+class ResponseChatRoom(BaseModel):
+    id: int
+
+
+class RequestCreateMessage(BaseModel):
+    content: str
 
 
 # class ResponseMessage(BaseModel):

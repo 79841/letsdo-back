@@ -2,10 +2,8 @@ from datetime import datetime, timedelta, timezone
 from database import Base
 from sqlalchemy import DATE, DATETIME, Boolean, Column, Date, DateTime, ForeignKey, Integer, String, Sequence, Text
 from sqlalchemy.orm import relationship
-
-# datetime_utc = datetime.utcnow()
-
-timezone_kst = timezone(timedelta(hours=9))
+from sqlalchemy.ext.declarative import declarative_base
+Base = declarative_base()
 
 
 class User(Base):
@@ -73,5 +71,6 @@ class Participant(Base):
     id = Column(Integer, id_seq, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id'))
     chatroom_id = Column(Integer, ForeignKey('chatroom.id'))
+    last_read_message_id = Column(Integer, ForeignKey('message.id'))
     user = relationship('User', back_populates='participations')
     chatroom = relationship('Chatroom', back_populates='participants')

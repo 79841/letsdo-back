@@ -6,7 +6,8 @@ from getToken import verify_token
 from models import Chatroom, Message, Participant, User
 import oauth2
 from repository import message
-import schemas, database
+import schemas
+import database
 from sqlalchemy.orm import Session
 from repository import checkList
 from fastapi.responses import HTMLResponse
@@ -32,12 +33,32 @@ connectedClients = {}
 
 
 @router.get("/{chatroomId}")
-async def getMessages(chatroomId:int, db: Session=Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
-
+async def getMessages(chatroomId: int, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
     return await message.get(chatroomId, db)
+
+
+@router.patch("/last/read/{chatroom_id}")
+async def update_last_read_message(chatroom_id: int, message_id: int, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
+    return await message.update_last_read_message(chatroom_id, message_id, db, current_user)
+
+
+@router.get("/unread/count/{chatroom_id}")
+async def get_unread_message_count(chatroom_id: int, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
+    return await message.get_unread_message_count(chatroom_id, db, current_user)
+
+
+@router.post("/create/{chatroom_id}")
+async def create_message(request: schemas.RequestCreateMessage, chatroom_id: int, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
+    return await message.create_message(request, chatroom_id, db, current_user)
 
 
 @router.websocket("/ws/")
 @router.websocket("/ws/{chatroomId}")
-async def websocketEndpoint(websocket: WebSocket, chatroomId:Optional[int]=None, token:Optional[str]=None, message_to:Optional[int]=None, db:Session=Depends(get_db)):
+async def websocketEndpoint(websocket: WebSocket, chatroomId: Optional[int] = None, token: Optional[str] = None, message_to: Optional[int] = None, db: Session = Depends(get_db)):
     await message.chat(websocket, chatroomId, token, message_to, db)
+
+
+@router.websocket("/unread/count/ws/{chatroom_id}")
+async def service_unread_message_count(websocket: WebSocket, chatroom_id: int, token: str, db: Session = Depends(get_db)):
+    current_user = oauth2.get_websocket_user(token)
+    await message.service_unread_message_count(websocket, chatroom_id, db, current_user)

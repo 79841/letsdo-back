@@ -1,7 +1,11 @@
-from fastapi import APIRouter, Depends, Request, status
-import schemas, database, oauth2
+from fastapi import APIRouter, Depends
+from fastapi.responses import Response
 from sqlalchemy.orm import Session
-from fastapi.responses import HTMLResponse, JSONResponse, Response, RedirectResponse
+
+import database
+import schemas
+
+
 from repository import authentication as auth
 
 
@@ -12,11 +16,10 @@ router = APIRouter(
 
 
 @router.post('/', response_class=Response)
-async def signin(request: schemas.Login, db: Session = Depends(database.get_db)):
-
-    return auth.signin(request, db)
+async def sign_in(request: schemas.Login, db_sess: Session = Depends(database.get_db)):
+    return auth.sign_in(request, db_sess)
 
 
 @router.get("/logout")
-async def logout():
+async def logout() -> Response:
     return auth.logout()

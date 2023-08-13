@@ -70,6 +70,10 @@ def get_current_user(data: str = Depends(oauth2_scheme)):
     return getToken.verify_token(data, credentials_exception)
 
 
+def get_websocket_user(data: str):
+    return get_current_user(data.split()[1])
+
+
 def login_check(request: Request):
     auth = request.cookies.get("Authorization")
     cookie_scheme, cookie_param = get_authorization_scheme_param(auth)

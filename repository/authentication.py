@@ -1,39 +1,43 @@
-from fastapi import Depends, Request, status, HTTPException, Response
-import schemas, database, models, getToken
+from fastapi import Depends, status, HTTPException, Response
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
+import schemas
+import database
+import models
+import getToken
+
 from hashing import Hash
-from fastapi.responses import  JSONResponse, RedirectResponse
 
 
-def signin(request: schemas.Login, db: Session = Depends(database.get_db)):
-    user = db.query(models.User).filter(
+def sign_in(request: schemas.Login, db_sess: Session = Depends(database.get_db)) -> JSONResponse:
+    user = db_sess.query(models.User).filter(
         models.User.email == request.email).first()
 
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Invalid Credentials")
+                            detail="Invalid Credentials")
 
     if not Hash.verify(user.password, request.password):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Incorrect password")
+                            detail="Incorrect password")
 
     access_token = getToken.create_access_token(
-        data={"id": user.id, "email": user.email, "username":user.username, "role":user.role})
+        data={"id": user.id, "email": user.email, "username": user.username, "role": user.role})
 
-    response = JSONResponse(content={"Authorization":f"Bearer {access_token}"}, status_code=200)
+    response = JSONResponse(
+        content={"Authorization": f"Bearer {access_token}"}, status_code=200)
     response.set_cookie(
         "Authorization",
         value=f"Bearer {access_token}",
         httponly=True,
         max_age=1800,
         expires=1800,
-        
     )
 
     return response
 
 
-def logout():
+def logout() -> Response:
     response = Response()
     response.delete_cookie("Authorization")
     return response

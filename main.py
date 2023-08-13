@@ -2,14 +2,21 @@ from fastapi import FastAPI
 import uvicorn
 import models
 from database import engine
-from routers import chatroom, checkList, message, user, authentication, todoList, exception, profile
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import RedirectResponse
-from fastapi import status, Request
+from routers import chatroom, checkList, message, user, authentication, todoList, profile
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
 models.Base.metadata.create_all(engine)
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -30,4 +37,5 @@ app.include_router(chatroom.router)
 app.include_router(profile.router)
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True, access_log=False)
+    uvicorn.run("main:app", host="0.0.0.0", port=22222,
+                reload=True, access_log=False)
