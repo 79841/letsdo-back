@@ -5,6 +5,7 @@ import database
 from sqlalchemy.orm import Session
 from fastapi import UploadFile, File
 from repository import profile
+from typing import Optional
 
 router = APIRouter(
     prefix='/profile',
@@ -21,6 +22,11 @@ def uploadProfileImage(file: UploadFile = File(...), db: Session = Depends(get_d
 @router.get("/")
 def getProfileImage(db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
     return profile.get(db, current_user)
+
+
+@router.get("/id/{user_id}")
+def getProfileImage(user_id: int, db: Session = Depends(get_db)):
+    return profile.get_by_id(db, user_id)
 
 
 @router.patch("/")

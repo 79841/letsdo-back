@@ -8,6 +8,7 @@ from sqlalchemy import Date
 
 
 class User(BaseModel):
+    id: int
     email: str
     username: str
     password: str
@@ -27,6 +28,8 @@ class CreateUser(User):
 
 
 class ShowUser(BaseModel):
+    id: int
+    email: str
     username: str
 
     class Config():

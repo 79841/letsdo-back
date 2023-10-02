@@ -32,9 +32,9 @@ connectedClients = {}
 # async def getOpponents(db: Session, current_user: schemas.User = Depends(oauth2.get_current_user)):
 
 
-@router.get("/{chatroomId}")
-async def getMessages(chatroomId: int, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
-    return await message.get(chatroomId, db)
+@router.get("/{chatroom_id}")
+async def getMessages(chatroom_id: int, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
+    return await message.get(chatroom_id, db)
 
 
 @router.patch("/last/read/{chatroom_id}")
@@ -53,9 +53,9 @@ async def create_message(request: schemas.RequestCreateMessage, chatroom_id: int
 
 
 @router.websocket("/ws/")
-@router.websocket("/ws/{chatroomId}")
-async def websocketEndpoint(websocket: WebSocket, chatroomId: Optional[int] = None, token: Optional[str] = None, message_to: Optional[int] = None, db: Session = Depends(get_db)):
-    await message.chat(websocket, chatroomId, token, message_to, db)
+@router.websocket("/ws/{chatroom_id}")
+async def websocketEndpoint(websocket: WebSocket, chatroom_id: Optional[int] = None, token: Optional[str] = None, message_to: Optional[int] = None, db: Session = Depends(get_db)):
+    await message.chat(websocket, chatroom_id, token, message_to, db)
 
 
 @router.websocket("/unread/count/ws/{chatroom_id}")

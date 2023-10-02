@@ -22,13 +22,12 @@ def create(request: schemas.User, db: Session):
         jsonable_encoder({"username": user['username']}), status_code=status.HTTP_201_CREATED)
 
 
-def show(username: str, db: Session):
+def show(db: Session, current_user:schemas.User):
     user = db.query(models.User).filter(
-        models.User.username == username).first()
+        models.User.id == current_user.id).first()
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"User with the username '{username}' is not found")
-
+                            detail=f"User with the id '{id}' is not found")
     return user
 
 
@@ -44,5 +43,4 @@ def update(request: schemas.UpdateUser, db: Session, current_user: schemas.User)
 
     db.add(user)
     db.commit()
-
-    return user
+    return {"msg": "update success"}

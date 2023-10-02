@@ -2,8 +2,7 @@ from datetime import datetime, timedelta, timezone
 from database import Base
 from sqlalchemy import DATE, DATETIME, Boolean, Column, Date, DateTime, ForeignKey, Integer, String, Sequence, Text
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
-Base = declarative_base()
+from sqlalchemy.sql import func
 
 
 class User(Base):
@@ -41,7 +40,7 @@ class CheckList(Base):
     user_id = Column(Integer, ForeignKey("user.id"), primary_key=True)
     code = Column(Integer, ForeignKey("todolist.code"), primary_key=True)
     done = Column(Boolean, default=False)
-    date = Column(DATE, default=datetime.utcnow, primary_key=True)
+    date = Column(DATE, default=func.now(), primary_key=True)
 
 
 class Chatroom(Base):
@@ -71,6 +70,6 @@ class Participant(Base):
     id = Column(Integer, id_seq, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id'))
     chatroom_id = Column(Integer, ForeignKey('chatroom.id'))
-    last_read_message_id = Column(Integer, ForeignKey('message.id'))
+    last_read_message_id = Column(Integer, default=0)
     user = relationship('User', back_populates='participations')
     chatroom = relationship('Chatroom', back_populates='participants')

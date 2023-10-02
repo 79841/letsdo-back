@@ -4,14 +4,14 @@ import oauth2
 import schemas
 import database
 from sqlalchemy.orm import Session
-from repository import checkList
+from admin.repository import checkList
 from fastapi.responses import HTMLResponse
 from typing import List
 from datetime import datetime, timedelta, timezone
 
 router = APIRouter(
-    prefix='/checklist',
-    tags=['checklist']
+    prefix='/admin/checklist',
+    tags=['(ADMIN) checklist']
 )
 get_db = database.get_db
 
@@ -26,14 +26,14 @@ async def createCheckList(request: list[schemas.CheckList], db: Session = Depend
 
 @router.get('/', response_model=list[schemas.ResponseCheckList])
 @router.get('/date/{date}', response_model=list[schemas.ResponseCheckList])
-async def get_checklist_by_date(date: str = todayDate, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
+async def get_user_checklist_by_date(user_id: int, date: str = todayDate, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
 
-    return checkList.getByDate(date, db, current_user)
+    return checkList.get_by_date(user_id, date, db, current_user)
 
 
 @router.get('/dates', response_model=list[schemas.ResponseCheckList])
-async def get_checklist_by_dates(start_date: str = todayDate, end_date: str = todayDate, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
-    return checkList.getByPeriod(start_date, end_date, db, current_user)
+async def get_user_checklist_by_dates(user_id: int, start_date: str = todayDate, end_date: str = todayDate, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
+    return checkList.get_by_period(user_id, start_date, end_date, db, current_user)
 
 
 @router.delete('/{code}')

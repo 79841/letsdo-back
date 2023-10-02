@@ -38,7 +38,11 @@ async def create_chatroom_with_counselor(db_sess: Session = Depends(get_db), cur
     return chatroom.create(1, db_sess, current_user)
 
 
-@router.post("/{messageTo}")
+@router.post("/{message_to}")
 async def create_chatroom(message_to: int, db_sess: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
 
     return chatroom.create(message_to, db_sess, current_user)
+
+@router.get("/opponent/{chatroom_id}")
+async def get_opponent(chatroom_id:int, db_sess:Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
+    return chatroom.get_opponent(chatroom_id, db_sess, current_user)
