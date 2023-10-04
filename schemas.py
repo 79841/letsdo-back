@@ -15,13 +15,13 @@ class User(BaseModel):
     role: int = 0
 
 
-class UpdateUser(User):
+class UpdateUser(BaseModel):
     email: Optional[str]
     username: Optional[str]
     password: Optional[str]
 
 
-class CreateUser(User):
+class CreateUser(BaseModel):
     email: str
     username: str
     password: str

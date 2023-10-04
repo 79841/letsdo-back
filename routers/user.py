@@ -30,4 +30,3 @@ async def getUser(db: Session = Depends(get_db), current_user: schemas.User = De
 async def updateUser(request: schemas.UpdateUser, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
 
     return user.update(request, db, current_user)
-
