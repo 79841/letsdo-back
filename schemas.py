@@ -33,7 +33,7 @@ class ShowUser(BaseModel):
     username: str
 
     class Config():
-        orm_mode = True
+        from_attributes = True
 
 
 class Login(BaseModel):
@@ -58,7 +58,7 @@ class TodoList(BaseModel):
     name: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class CheckList(BaseModel):
@@ -68,7 +68,7 @@ class CheckList(BaseModel):
     date: Optional[date]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class ResponseCheckList(BaseModel):

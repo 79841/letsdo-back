@@ -16,7 +16,6 @@ import database
 # from fastapi.security import APIKeyHeader
 # from starlette.requests import Request as WebsocRequest
 # from fastapi.security import APIKeyQuery
-# from fastapi_jwt_auth import AuthJWT
 from repository import chatroom
 
 
@@ -29,6 +28,7 @@ get_db = database.get_db
 
 @router.get("/")
 async def get_chatroom(db_sess: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
+    print("get chatroom")
     return chatroom.get(db_sess, current_user)
 
 

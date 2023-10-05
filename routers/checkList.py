@@ -26,7 +26,6 @@ async def createCheckList(request: list[schemas.CheckList], db: Session = Depend
 @router.get('/', response_model=list[schemas.ResponseCheckList])
 @router.get('/date/{date}', response_model=list[schemas.ResponseCheckList])
 async def get_checklist_by_date(date: str = get_today(), db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
-    print()
     return checkList.getByDate(date, db, current_user)
 
 

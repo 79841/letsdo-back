@@ -16,7 +16,6 @@ import database
 # from fastapi.security import APIKeyHeader
 # from starlette.requests import Request as WebsocRequest
 # from fastapi.security import APIKeyQuery
-# from fastapi_jwt_auth import AuthJWT
 from admin.repository import chatroom
 
 

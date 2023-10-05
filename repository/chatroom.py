@@ -15,16 +15,16 @@ from typing import List, Optional
 from fastapi.security import APIKeyHeader
 from starlette.requests import Request as WebsocRequest
 from fastapi.security import APIKeyQuery
-from fastapi_jwt_auth import AuthJWT
 from sqlalchemy import and_
 
 get_db = database.get_db
 
 
 def get(db: Session, current_user: schemas.User ):
-    chatroom = db.query(Participant.chatroom_id).filter(
+    chatroom, = db.query(Participant.chatroom_id).filter(
         Participant.user_id == current_user.id).first()
-    return chatroom
+    print(chatroom)
+    return {"chatroom_id":chatroom}
 
 
 def create(messageTo: int, db: Session, current_user: schemas.User ):
