@@ -22,6 +22,6 @@ from utils.checkAdmin import check_admin
 
 def get_all_chatroom(db: Session, current_user: schemas.User):
     check_admin(db, current_user)
-    chatrooms = db.query(Participant.chatroom_id, Participant.user_id).filter(
+    chatrooms = db.query(Participant).filter(
         Participant.user_id != current_user.id).all()
     return chatrooms

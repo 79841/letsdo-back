@@ -10,17 +10,21 @@ import time
 from typing import Optional
 from fastapi.responses import FileResponse
 
+# profileImageDir = os.path.join(os.getcwd(), settings.PROFILE_IMAGE_DIR)
+# profileImageDir = os.path.join(os.getcwd(), settings.PROFILE_IMAGE_DIR)
+
 
 def create(file: UploadFile, db: Session, current_user: schemas.User):
+    print("image create")
     profile = db.query(Profile).filter(
         current_user.id == Profile.user_id).first()
+    print(profile.__dict__)
+    if profile is not None:
+        raise HTTPException(
+            status_code=302, detail="Profile image already exist")
 
-    if profile:
-        return {"message": "Profile image already existed"}
-
-    profileImageDir = os.path.join(os.getcwd(), settings.PROFILE_IMAGE_DIR)
     fileExtension = os.path.splitext(file.filename)[1]
-    filePath = f"{profileImageDir}/{current_user.id}_{round(time.time() * 1000)}{fileExtension}"
+    filePath = f"{settings.PROFILE_IMAGE_DIR}/{current_user.id}_{round(time.time() * 1000)}{fileExtension}"
     with open(filePath, "wb") as image:
         shutil.copyfileobj(file.file, image)
 
@@ -58,9 +62,8 @@ def update(file: UploadFile, db: Session, current_user: schemas.User):
     if profile.path:
         os.remove(profile.path)
 
-    profileImageDir = os.path.join(os.getcwd(), settings.PROFILE_IMAGE_DIR)
     fileExtension = os.path.splitext(file.filename)[1]
-    filePath = f"{profileImageDir}/{current_user.id}_{round(time.time() * 1000)}{fileExtension}"
+    filePath = f"{settings.PROFILE_IMAGE_DIR}/{current_user.id}_{round(time.time() * 1000)}{fileExtension}"
     with open(filePath, "wb") as image:
         shutil.copyfileobj(file.file, image)
 
@@ -76,7 +79,10 @@ def delete(db: Session, current_user: schemas.User):
     if not profile or not profile.path:
         raise HTTPException(status_code=404, detail="Profile image not found")
 
-    os.remove(profile.path)
+    try:
+        os.remove(profile.path)
+    except:
+        pass
     db.delete(profile)
     db.commit()
 
