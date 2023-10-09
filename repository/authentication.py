@@ -40,7 +40,6 @@ def sign_in(request: schemas.Login, db_sess: Session = Depends(database.get_db))
 def sign_in_with_token(current_user: schemas.User) -> JSONResponse:
     access_token = getToken.create_access_token(
         data={"id": current_user.id})
-    print(access_token)
     response = JSONResponse(
         content={"Authorization": f"Bearer {access_token}"}, status_code=200)
     response.set_cookie(

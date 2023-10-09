@@ -28,7 +28,6 @@ get_db = database.get_db
 
 @router.get("/")
 async def get_chatroom(db_sess: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
-    print("get chatroom")
     return chatroom.get(db_sess, current_user)
 
 
@@ -43,6 +42,7 @@ async def create_chatroom(message_to: int, db_sess: Session = Depends(get_db), c
 
     return chatroom.create(message_to, db_sess, current_user)
 
+
 @router.get("/opponent/{chatroom_id}")
-async def get_opponent(chatroom_id:int, db_sess:Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
+async def get_opponent(chatroom_id: int, db_sess: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
     return chatroom.get_opponent(chatroom_id, db_sess, current_user)

@@ -15,10 +15,8 @@ from fastapi.responses import FileResponse
 
 
 def create(file: UploadFile, db: Session, current_user: schemas.User):
-    print("image create")
     profile = db.query(Profile).filter(
         current_user.id == Profile.user_id).first()
-    print(profile.__dict__)
     if profile is not None:
         raise HTTPException(
             status_code=302, detail="Profile image already exist")

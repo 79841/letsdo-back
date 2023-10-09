@@ -16,7 +16,6 @@ get_db = database.get_db
 
 @router.post("/")
 def uploadProfileImage(file: UploadFile = File(...), db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
-    print("upload profile")
     return profile.create(file, db, current_user)
 
 

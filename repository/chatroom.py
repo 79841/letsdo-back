@@ -20,14 +20,13 @@ from sqlalchemy import and_
 get_db = database.get_db
 
 
-def get(db: Session, current_user: schemas.User ):
+def get(db: Session, current_user: schemas.User):
     chatroom, = db.query(Participant.chatroom_id).filter(
         Participant.user_id == current_user.id).first()
-    print(chatroom)
-    return {"chatroom_id":chatroom}
+    return {"chatroom_id": chatroom}
 
 
-def create(messageTo: int, db: Session, current_user: schemas.User ):
+def create(messageTo: int, db: Session, current_user: schemas.User):
 
     messageTo = messageTo if current_user.role == 1 else db.query(
         User.id).filter_by(role=1)
@@ -38,6 +37,8 @@ def create(messageTo: int, db: Session, current_user: schemas.User ):
     db.commit()
     return schemas.ResponseChatRoom(id=chatroom.id)
 
-def get_opponent(chatroom_id:int, db:Session, current_user: schemas.User):
-    opponent = db.query(Participant.user_id).filter(and_(Participant.chatroom_id == chatroom_id, Participant.user_id != current_user.id)).first()
+
+def get_opponent(chatroom_id: int, db: Session, current_user: schemas.User):
+    opponent = db.query(Participant.user_id).filter(and_(
+        Participant.chatroom_id == chatroom_id, Participant.user_id != current_user.id)).first()
     return opponent

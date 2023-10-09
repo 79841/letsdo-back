@@ -22,8 +22,7 @@ async def sign_in(request: schemas.Login, db_sess: Session = Depends(database.ge
 
 
 @router.get('/token', response_class=Response)
-async def sign_in(current_user: schemas.User = Depends(oauth2.get_current_user)):
-    print("hello")
+async def sign_in_by_token(current_user: schemas.User = Depends(oauth2.get_current_user)):
     return auth.sign_in_with_token(current_user)
 
 

@@ -60,7 +60,6 @@ async def service_unread_message_count(websocket: WebSocket, chatroom_id: int, d
         while True:
             message = await p.get_message()
             if message and "data" in message and isinstance(message["data"], bytes):
-                print(message)
                 data = json.loads(message["data"].decode("utf-8"))
                 if "content" in data:
 
@@ -81,8 +80,6 @@ async def service_unread_message_count(websocket: WebSocket, chatroom_id: int, d
 
     unread_message_count = await get_unread_message_count(
         chatroom_id, db, current_user)
-
-    # print(unread_message_count)
 
     await websocket.send_text(json.dumps(unread_message_count))
 
@@ -129,7 +126,6 @@ async def create_message(request: schemas.RequestCreateMessage, chatroom_id: int
     db.add(message)
     db.commit()
     db.close()
-    print("new message")
     redis = await get_redis_client()
     await redis.publish(f"new_message",
                         json.dumps({"content": request.content}))
@@ -145,8 +141,6 @@ async def chat(websocket: WebSocket, chatroomId: Optional[int] = None, token: Op
     chatroom = db.query(Chatroom).filter_by(id=chatroomId).first()
     messageTo = messageTo if current_user.role == 1 else db.query(
         User.id).filter_by(role=1)
-
-    print("service start")
 
     try:
         while True:
@@ -175,18 +169,12 @@ async def chat(websocket: WebSocket, chatroomId: Optional[int] = None, token: Op
             await redis.publish(f"new_message", json.dumps({"content": content}))
 
     except WebSocketDisconnect as e:
-        print(e)
         await close_websocket(current_user.id)
     finally:
         db.close()
-
-    print("service end")
-    # if current_user.id in connected_chat_clients:
-    #     connected_chat_clients.pop(current_user.id)
 
 
 async def close_websocket(user_id: int):
     websocket = connected_chat_clients.get(user_id)
     if websocket:
-        # await websocket.close()
         del connected_chat_clients[user_id]
