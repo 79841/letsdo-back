@@ -39,6 +39,6 @@ def create(messageTo: int, db: Session, current_user: schemas.User):
 
 
 def get_opponent(chatroom_id: int, db: Session, current_user: schemas.User):
-    opponent = db.query(Participant.user_id).filter(and_(
+    opponent, = db.query(Participant.user_id).filter(and_(
         Participant.chatroom_id == chatroom_id, Participant.user_id != current_user.id)).first()
-    return opponent
+    return {"user_id":opponent}

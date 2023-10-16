@@ -10,12 +10,15 @@ from fastapi.responses import HTMLResponse
 from typing import List
 
 router = APIRouter(
-    prefix='/admin',
+    prefix='/admin/user',
     tags=['(ADMIN) users']
 )
 
 get_db = database.get_db
 
+@router.post('/', response_model=schemas.CreateUser)
+async def createUser(request: schemas.CreateUser, db: Session = Depends(get_db)):
+    return user.create(request, db)
 
 @router.get("/all/clients", response_model=List[schemas.ShowUser])
 async def get_clients(db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):

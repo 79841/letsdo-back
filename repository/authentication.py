@@ -15,11 +15,11 @@ def sign_in(request: schemas.Login, db_sess: Session = Depends(database.get_db))
 
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail="Invalid Credentials")
+                            detail="존재하지 않는 이메일입니다.")
 
     if not Hash.verify(user.password, request.password):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail="Incorrect password")
+                            detail="비밀번호가 정확하지 않습니다.")
 
     access_token = getToken.create_access_token(
         data={"id": user.id, "email": user.email, "username": user.username, "role": user.role})

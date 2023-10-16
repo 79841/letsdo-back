@@ -8,6 +8,27 @@ from fastapi.responses import RedirectResponse, Response, JSONResponse
 import datetime
 from utils.checkAdmin import check_admin
 
+def create(request: schemas.User, db: Session):
+
+    if db.query(models.User).filter(models.User.role == 1).first():
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=f"관리자가 이미 존재합니다.")
+
+    if db.query(User).filter(User.email == request.email).first():
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="해당 이메일이 이미 존재합니다.")
+
+    if db.query(User).filter(User.name == request.username).first():
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="해당 이름이 이미 존재합니다.")
+
+    user = dict(request)
+    user.update(password=hashing.Hash.bcrypt(user['password']))
+
+    new_user = models.User(**dict(user), role=1)
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+
+    return JSONResponse(
+        jsonable_encoder({"username": user['username']}), status_code=status.HTTP_201_CREATED)
 
 def get_clients(db: Session, current_user: schemas.User):
     # if not check_admin(db, current_user):

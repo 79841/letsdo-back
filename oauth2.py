@@ -60,17 +60,26 @@ class OAuth2PasswordBearerCookie(OAuth2):
 oauth2_scheme = OAuth2PasswordBearerCookie(tokenUrl="token")
 
 
-def get_current_user(data: str = Depends(oauth2_scheme)):
-    credentials_exception = HTTPException(
+credentials_exception = credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
 
+def get_current_user(data: str = Depends(oauth2_scheme)):
+    # credentials_exception = HTTPException(
+    #     status_code=status.HTTP_401_UNAUTHORIZED,
+    #     detail="Could not validate credentials",
+    #     headers={"WWW-Authenticate": "Bearer"},
+    # )
+
     return getToken.verify_token(data, credentials_exception)
 
 
 def get_websocket_user(data: str):
+    if len(data.split()) < 2:
+        raise credentials_exception
+    
     return get_current_user(data.split()[1])
 
 
