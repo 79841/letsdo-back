@@ -8,14 +8,15 @@ from fastapi.responses import RedirectResponse, Response, JSONResponse
 import datetime
 
 
-
 def create(request: schemas.User, db: Session):
 
     if db.query(User).filter(User.email == request.email).first():
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="해당 이메일이 이미 존재합니다.")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="해당 이메일이 이미 존재합니다.")
 
-    if db.query(User).filter(User.name == request.username).first():
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="해당 이름이 이미 존재합니다.")
+    if db.query(User).filter(User.username == request.username).first():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="해당 이름이 이미 존재합니다.")
 
     user = dict(request)
     user.update(password=hashing.Hash.bcrypt(user['password']))
@@ -29,7 +30,7 @@ def create(request: schemas.User, db: Session):
         jsonable_encoder({"username": user['username']}), status_code=status.HTTP_201_CREATED)
 
 
-def show(db: Session, current_user:schemas.User):
+def show(db: Session, current_user: schemas.User):
     user = db.query(User).filter(
         User.id == current_user.id).first()
     if not user:

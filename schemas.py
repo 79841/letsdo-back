@@ -54,7 +54,6 @@ class TokenData(BaseModel):
 
 
 class TodoList(BaseModel):
-    code: int
     name: str
 
     class Config:

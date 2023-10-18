@@ -8,16 +8,20 @@ from fastapi.responses import RedirectResponse, Response, JSONResponse
 import datetime
 from utils.checkAdmin import check_admin
 
-def create(request: schemas.User, db: Session):
+
+def create(request: schemas.CreateUser, db: Session):
 
     if db.query(models.User).filter(models.User.role == 1).first():
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=f"관리자가 이미 존재합니다.")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail=f"관리자가 이미 존재합니다.")
 
-    if db.query(User).filter(User.email == request.email).first():
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="해당 이메일이 이미 존재합니다.")
+    if db.query(models.User).filter(models.User.email == request.email).first():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="해당 이메일이 이미 존재합니다.")
 
-    if db.query(User).filter(User.name == request.username).first():
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="해당 이름이 이미 존재합니다.")
+    if db.query(models.User).filter(models.User.username == request.username).first():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="해당 이름이 이미 존재합니다.")
 
     user = dict(request)
     user.update(password=hashing.Hash.bcrypt(user['password']))
@@ -30,6 +34,7 @@ def create(request: schemas.User, db: Session):
     return JSONResponse(
         jsonable_encoder({"username": user['username']}), status_code=status.HTTP_201_CREATED)
 
+
 def get_clients(db: Session, current_user: schemas.User):
     # if not check_admin(db, current_user):
     #     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
@@ -39,7 +44,7 @@ def get_clients(db: Session, current_user: schemas.User):
         models.User.role == 0).all()
     if not clients:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"User with the id '{id}' is not found")
+                            detail=f"등록된 사용자가 존재하지 않습니다.")
     return clients
 
 
