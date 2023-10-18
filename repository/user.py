@@ -35,7 +35,7 @@ def show(db: Session, current_user: schemas.User):
         User.id == current_user.id).first()
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"User with the id '{id}' is not found")
+                            detail=f"User with the id '{current_user.id}' is not found")
     return user
 
 

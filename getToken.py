@@ -8,6 +8,7 @@ ALGORITHM = "HS256"
 # ACCESS_TOKEN_EXPIRE_MINUTES = 30
 ACCESS_TOKEN_EXPIRE_DAYS = 365 * 10
 
+
 def create_access_token(data: dict):
     to_encode = data.copy()
     expire = datetime.utcnow() + timedelta(days=ACCESS_TOKEN_EXPIRE_DAYS)
@@ -19,13 +20,10 @@ def create_access_token(data: dict):
 def verify_token(token: str, credentials_exception=None):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        # email: str = payload.get("email")
-        id: int = payload.get("id")
-        # role:int = payload.get("role")
-        # username:str = payload.get("username")
+        id = payload.get("id")
         if id is None:
-            # raise credentials_exception
-            return {'current_user': None}
+            raise credentials_exception
+            # return {'current_user': None}
         token_data = TokenData(id=id)
         return token_data
 

@@ -1,6 +1,6 @@
 import datetime
 import json
-from fastapi import APIRouter, Depends, Query, Request, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import or_
 from getToken import verify_token
 from models import Chatroom, Message, Participant, User
@@ -21,9 +21,13 @@ get_db = database.get_db
 
 
 def get(db: Session, current_user: schemas.User):
-    chatroom, = db.query(Participant.chatroom_id).filter(
+    chatroom = db.query(Participant.chatroom_id).filter(
         Participant.user_id == current_user.id).first()
-    return {"chatroom_id": chatroom}
+    if not chatroom:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Chatroom doesn't exist")
+
+    return {"chatroom_id": chatroom[0]}
 
 
 def create(messageTo: int, db: Session, current_user: schemas.User):
@@ -41,4 +45,4 @@ def create(messageTo: int, db: Session, current_user: schemas.User):
 def get_opponent(chatroom_id: int, db: Session, current_user: schemas.User):
     opponent, = db.query(Participant.user_id).filter(and_(
         Participant.chatroom_id == chatroom_id, Participant.user_id != current_user.id)).first()
-    return {"user_id":opponent}
+    return {"user_id": opponent}

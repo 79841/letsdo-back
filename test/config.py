@@ -1,2 +1,2 @@
-server_url = "http://141.164.51.245:22222"
+server_url = "http://localhost:8000"
 headers = {"Content-Type": "application/json"}

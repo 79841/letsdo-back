@@ -54,10 +54,15 @@ class TokenData(BaseModel):
 
 
 class TodoList(BaseModel):
+    code: int
     name: str
 
     class Config:
         from_attributes = True
+
+
+class CreateTodoList(BaseModel):
+    name: str
 
 
 class CheckList(BaseModel):

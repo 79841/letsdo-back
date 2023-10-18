@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, Request
-import schemas, database
+import schemas
+import database
 from sqlalchemy.orm import Session
 from repository import todoList
 from fastapi.responses import HTMLResponse
@@ -14,7 +15,7 @@ get_db = database.get_db
 
 
 @router.post('/', response_model=schemas.TodoList)
-async def createTodo(request: schemas.TodoList, db: Session = Depends(get_db)):
+async def createTodo(request: schemas.CreateTodoList, db: Session = Depends(get_db)):
     return todoList.create(request, db)
 
 
@@ -24,5 +25,5 @@ async def getTodoList(db: Session = Depends(get_db)):
 
 
 @router.delete('/{code}')
-async def deleteTodo(code:int, db:Session = Depends(get_db)):
+async def deleteTodo(code: int, db: Session = Depends(get_db)):
     return todoList.delete(code, db)

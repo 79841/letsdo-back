@@ -150,6 +150,15 @@ _Below is an example of how you can install and set up your app._
    python main.py
    ```
 
+6. Test
+
+   _It is the process of adding the test dataset to the database._
+
+   ```sh
+   cd ./test
+   python test.py
+   ```
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
