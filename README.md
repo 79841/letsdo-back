@@ -8,7 +8,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/skj974600/kscia-back">
+  <a href="https://github.com/79841/kscia-back">
     <img src="images/readme/logo.png" alt="Logo" width="80" height="80">
   </a>
 
@@ -17,14 +17,14 @@
   <p align="center">
     KSCIA backend server to provide APIs and services
     <br />
-    <a href="https://github.com/skj974600/kscia-back"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/79841/kscia-back"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/skj974600/kscia-back">View Demo</a>
+    <a href="https://github.com/79841/kscia-back">View Demo</a>
     ·
-    <a href="https://github.com/skj974600/kscia-back/issues">Report Bug</a>
+    <a href="https://github.com/79841/kscia-back/issues">Report Bug</a>
     ·
-    <a href="https://github.com/skj974600/kscia-back/issues">Request Feature</a>
+    <a href="https://github.com/79841/kscia-back/issues">Request Feature</a>
   </p>
 </div>
 
@@ -120,7 +120,7 @@ _Below is an example of how you can install and set up your app._
 1. Clone the repo
 
    ```sh
-   git clone https://github.com/skj974600/kscia-back.git
+   git clone https://github.com/79841/kscia-back.git
    ```
 
 2. Start virtual environment
@@ -173,20 +173,20 @@ _Please refer to the [Documentation](https://141.164.51.245:22222/docs)_
 
 `Letmedev` - <79841@naver.com>
 
-Project Link: [https://github.com/skj974600/kscia-back](https://github.com/skj974600/kscia-back)
+Project Link: [https://github.com/79841/kscia-back](https://github.com/79841/kscia-back)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 
-[contributors-shield]: https://img.shields.io/github/contributors/skj974600/kscia-back.svg?style=for-the-badge
-[contributors-url]: https://github.com/skj974600/kscia-back/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/skj974600/kscia-back.svg?style=for-the-badge
-[forks-url]: https://github.com/skj974600/kscia-back/network/members
-[stars-shield]: https://img.shields.io/github/stars/skj974600/kscia-back.svg?style=for-the-badge
-[stars-url]: https://github.com/skj974600/kscia-back/stargazers
-[issues-shield]: https://img.shields.io/github/issues/skj974600/kscia-back.svg?style=for-the-badge
-[issues-url]: https://github.com/skj974600/kscia-back/issues
+[contributors-shield]: https://img.shields.io/github/contributors/79841/kscia-back.svg?style=for-the-badge
+[contributors-url]: https://github.com/79841/kscia-back/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/79841/kscia-back.svg?style=for-the-badge
+[forks-url]: https://github.com/79841/kscia-back/network/members
+[stars-shield]: https://img.shields.io/github/stars/79841/kscia-back.svg?style=for-the-badge
+[stars-url]: https://github.com/79841/kscia-back/stargazers
+[issues-shield]: https://img.shields.io/github/issues/79841/kscia-back.svg?style=for-the-badge
+[issues-url]: https://github.com/79841/kscia-back/issues
 
 <!-- [linkedin-url]: https://linkedin.com/in/othneildrew -->
 
